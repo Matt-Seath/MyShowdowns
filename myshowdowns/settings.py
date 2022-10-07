@@ -40,14 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'debug_toolbar',
-    'battles',
-    'teams',
-    'frontend',
-    'core',
-    'api',
+    'corsheaders',
+    'battles.apps.BattlesConfig',
+    'teams.apps.TeamsConfig',
+    'core.apps.CoreConfig',
+    'api.apps.ApiConfig',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
