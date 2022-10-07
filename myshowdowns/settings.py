@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'debug_toolbar',
     'corsheaders',
-    'battles.apps.BattlesConfig',
-    'teams.apps.TeamsConfig',
     'core.apps.CoreConfig',
     'api.apps.ApiConfig',
 ]

@@ -11,6 +11,7 @@ djangorestframework = "*"
 drf-nested-routers = "*"
 pypokedex = "*"
 django-cors-headers = "*"
+requests = "*"
 
 [dev-packages]
 
