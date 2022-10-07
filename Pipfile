@@ -12,6 +12,7 @@ drf-nested-routers = "*"
 pypokedex = "*"
 django-cors-headers = "*"
 requests = "*"
+pillow = "*"
 
 [dev-packages]
 
