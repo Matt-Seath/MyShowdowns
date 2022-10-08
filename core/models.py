@@ -8,7 +8,7 @@ class Sprite(models.Model):
 
 class Username(models.Model):
     name = models.CharField(max_length=255)
-    sprite = models.ForeignKey(Sprite, on_delete=models.PROTECT)
+    sprite = models.ForeignKey(Sprite, null=True, blank=True, on_delete=models.PROTECT)
 
 
 class Battle(models.Model):
