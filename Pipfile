@@ -13,6 +13,8 @@ pypokedex = "*"
 django-cors-headers = "*"
 requests = "*"
 pillow = "*"
+markdown = "*"
+django-filter = "*"
 
 [dev-packages]
 

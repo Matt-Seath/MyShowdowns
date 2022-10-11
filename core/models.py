@@ -18,6 +18,7 @@ class Battle(models.Model):
     player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
     player_2 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_2")
     victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
+    date_created = models.DateTimeField(auto_now=True)
 
 
 class PokemonType(models.Model):

@@ -4,7 +4,7 @@ from .views import index
 
 urlpatterns = [
     path("", index),
-    path("battles", index),
-    path("teams", index),
+    path("battles/", index),
+    path("teams/", index),
 ]
 

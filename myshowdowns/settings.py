@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'core.apps.CoreConfig',
     'api.apps.ApiConfig',
-    'comments.apps.CommentsConfig',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
