@@ -19,8 +19,8 @@ class PokemonTypeSerializer(serializers.ModelSerializer):
         fields = ["id", "title"]
 
 
-class PokemonSerializer(serializers.ModelSerializer):
+class BasePokemonSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Pokemon
+        model = BasePokemon
         fields = ["id", "name", "dex_number", "type_1", "type_2"]
 
