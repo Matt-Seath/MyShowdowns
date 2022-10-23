@@ -1,22 +1,25 @@
+from unittest.util import _MAX_LENGTH
 from django.db import models
 
 
 # Create your models here.
-class Sprite(models.Model):
-    front = models.ImageField()
-    front_shiny = models.ImageField()
-    back = models.ImageField()
-    back_shiny = models.ImageField()
+class Art(models.Model):
+    artwork = models.ImageField(null=True)
+    front = models.ImageField(null=True)
+    front_shiny = models.ImageField(null=True)
+    back = models.ImageField(null=True)
+    back_shiny = models.ImageField(null=True)
 
 
 class Ability(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.CharField(max_length=255, null=True)
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, null=True)
+    effect = models.CharField(max_length=1600, null=True)
 
 
 class Username(models.Model):
     name = models.CharField(max_length=255)
-    sprite = models.ForeignKey(Sprite, null=True, blank=True, on_delete=models.PROTECT)
+    sprite = models.ForeignKey(Art, null=True, blank=True, on_delete=models.PROTECT)
 
 
 class Battle(models.Model):
@@ -32,7 +35,7 @@ class Battle(models.Model):
 
 class PokemonType(models.Model):
     title = models.CharField(max_length=255)
-    sprite = models.ForeignKey(Sprite, on_delete=models.PROTECT)
+    sprite = models.ForeignKey(Art, on_delete=models.PROTECT)
 
 
 class BasePokemon(models.Model):
@@ -48,7 +51,7 @@ class BasePokemon(models.Model):
     ability_1 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_1")
     ability_2 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_2")
     ability_3 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_3")
-    sprite = models.ForeignKey(Sprite, on_delete=models.PROTECT)
+    sprite = models.ForeignKey(Art, on_delete=models.PROTECT)
     base_hp = models.IntegerField()
     base_att = models.IntegerField()
     base_def = models.IntegerField()

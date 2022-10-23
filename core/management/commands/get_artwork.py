@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
             image = artwork_path + pokemon + ".png"
 
-            url_request = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokemon}.png"
+            url_request = f"https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/official-artwork/{pokemon}.png"
 
 
             file = open(image, "wb")
