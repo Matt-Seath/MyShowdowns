@@ -4,7 +4,6 @@ from pathlib import Path
 import requests
 
 
-NUMBER_OF_ABILITIES = 267
 
 class Command(BaseCommand):
     help = 'Populates the database with pokemon abilities'
@@ -13,7 +12,7 @@ class Command(BaseCommand):
         with connection.cursor() as cursor:
             cursor.execute("DELETE FROM core_ability")
 
-        for ability in range(NUMBER_OF_ABILITIES):
+        for ability in range(1000):
             ability = str(ability + 1)
             print(ability)
             url_request = f"https://pokeapi.co/api/v2/ability/{ability}"
@@ -21,15 +20,21 @@ class Command(BaseCommand):
 
             if response.status_code == 200:
                 ability = response.json()
-                ability_id = ability["id"]
-                ability_name = ability["name"]
-                try:
-                    ability_effect = ability["effect_entries"][1]["effect"]
-                except:
-                    try:
+                if "id" in ability:
+                    ability_id = ability["id"]
+                if "name" in ability:
+                    ability_name = ability["name"]
+                    print(ability_name)
+                if "effect_entries" in ability:
+                    if len(ability["effect_entries"]) == 2:
+                        ability_effect = ability["effect_entries"][1]["effect"]
+                    elif len(ability["effect_entries"]) == 1:
                         ability_effect = ability["effect_entries"][0]["effect"]
-                    except:
-                        ability_effect = "Data not found."
+                    elif len(ability["effect_entries"]) == 0:
+                        if len(ability["flavor_text_entries"]) > 7:
+                            ability_effect = ability["flavor_text_entries"][7]["flavor_text"]             
+                        else:
+                            ability_effect = "Data not found."
                 
                 with connection.cursor() as cursor:
                     cursor.execute(
@@ -37,8 +42,13 @@ class Command(BaseCommand):
                         VALUES (%s, %s, %s)""", (ability_id, ability_name, ability_effect)
                     )
                 print("Successfully added " + ability_name + " to the database.")
+
+            elif response.status_code == 404:
+                print(f"{ability} does not exist.")
+                break
+
             else:
-                print("Error, could not retrive " + ability)
+                print(f"Error: Status = {response.status_code}. Data not found")
 
         print("Done.")
 
