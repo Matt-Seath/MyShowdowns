@@ -5,6 +5,7 @@ from pathlib import Path
 import requests
 import os
 
+
 NUMBER_OF_POKEMON = 905
 
 class Command(BaseCommand):
@@ -60,16 +61,6 @@ class Command(BaseCommand):
                 
                 else:
                     print("Error. Could not retrieve" + sprite)
-
         
 
-        # print('Populating the database...')
-        # current_dir = os.path.dirname(__file__)
-        # file_path = os.path.join(current_dir, 'seed.sql')
-        # sql = Path(file_path).read_text()
-
-        # with connection.cursor() as cursor:
-        #     cursor.execute(sql)
-
-        print("Done.")
-
+           print("Done.")
