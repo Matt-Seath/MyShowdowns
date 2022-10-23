@@ -6,7 +6,6 @@ import requests
 import os
 
 
-NUMBER_OF_POKEMON = 905
 
 class Command(BaseCommand):
     help = 'Creates Directories within the project and populates them with sprite images'
@@ -28,7 +27,7 @@ class Command(BaseCommand):
 
 
         """Download the sprites associated with each pokemon and save them in their respective directories"""
-        for pokemon in range(NUMBER_OF_POKEMON):
+        for pokemon in range(5000):
             pokemon = str(pokemon + 1)
             print(pokemon)
 
@@ -47,6 +46,11 @@ class Command(BaseCommand):
                 (back_request_url, back_sprite), (back_shiny_request_url, back_shiny_sprite), 
             ]
 
+            test = requests.get(front_request_url)
+            if test.status_code == 404:
+                print(f"{pokemon} does not exist.")
+                break
+
             for item in list_of_sprite_tuples:
                 url_request, sprite = item
 
@@ -58,9 +62,9 @@ class Command(BaseCommand):
                     file.close
 
                     print(sprite + " has successfully downloaded.")
-                
+
                 else:
                     print("Error. Could not retrieve" + sprite)
         
 
-           print("Done.")
+        print("Done.")

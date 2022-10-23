@@ -6,8 +6,6 @@ import requests
 import os
 
 
-NUMBER_OF_POKEMON = 905
-
 class Command(BaseCommand):
     help = 'Creates Directories within the project and populates them with official pokemon artwork images'
 
@@ -19,7 +17,7 @@ class Command(BaseCommand):
 
 
         """Download the artwork for each pokemon and store it in the created directory"""
-        for pokemon in range(NUMBER_OF_POKEMON):
+        for pokemon in range(5000):
             pokemon = str(pokemon + 1)
             print(pokemon)
 
@@ -36,7 +34,11 @@ class Command(BaseCommand):
                 file.close
 
                 print(image + " has successfully downloaded.")
-                
+
+            elif response.status_code == 404:
+                print(f"{image} does not exist.")
+                break
+             
             else:
                 print("Error. Could not retrieve" + image)
 
