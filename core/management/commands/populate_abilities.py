@@ -26,14 +26,13 @@ class Command(BaseCommand):
                     ability_name = ability["name"]
                     print(ability_name)
                 if "effect_entries" in ability:
-                    if len(ability["effect_entries"]) == 2:
+                    if len(ability["flavor_text_entries"]) > 7:
+                        ability_effect = ability["flavor_text_entries"][7]["flavor_text"]             
+                    elif len(ability["effect_entries"]) == 2:
                         ability_effect = ability["effect_entries"][1]["effect"]
                     elif len(ability["effect_entries"]) == 1:
                         ability_effect = ability["effect_entries"][0]["effect"]
                     elif len(ability["effect_entries"]) == 0:
-                        if len(ability["flavor_text_entries"]) > 7:
-                            ability_effect = ability["flavor_text_entries"][7]["flavor_text"]             
-                        else:
                             ability_effect = "Data not found."
                 
                 with connection.cursor() as cursor:

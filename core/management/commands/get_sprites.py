@@ -14,8 +14,8 @@ class Command(BaseCommand):
 
         """Create directories to store images on the local file system"""
         front_dir_path = os.path.join(settings.BASE_DIR, "media/sprites/pokemon/front/")
-        front_shiny_dir_path = os.path.join(settings.BASE_DIR, "media/sprites/pokemon/front_shiny/")
         back_dir_path = os.path.join(settings.BASE_DIR, "media/sprites/pokemon/back/")
+        front_shiny_dir_path = os.path.join(settings.BASE_DIR, "media/sprites/pokemon/front_shiny/")
         back_shiny_dir_path = os.path.join(settings.BASE_DIR, "media/sprites/pokemon/back_shiny/")
 
         list_of_new_dirs = [

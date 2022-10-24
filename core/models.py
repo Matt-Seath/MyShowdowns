@@ -7,14 +7,12 @@ class Art(models.Model):
     artwork = models.ImageField(null=True)
     front = models.ImageField(null=True)
     front_shiny = models.ImageField(null=True)
-    back = models.ImageField(null=True)
-    back_shiny = models.ImageField(null=True)
 
 
 class Ability(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, null=True)
-    effect = models.CharField(max_length=1600, null=True)
+    effect = models.CharField(max_length=255, null=True)
 
 
 class Username(models.Model):
