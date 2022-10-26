@@ -9,5 +9,5 @@ def bar(task, current, total, optional=" "):
     if (current + 1) == total:
         print(f"{task}  (100% Completed)")
     else:
-        print(f"{task}  [{full_pixels}{empty_pixels}]   {current} of {total} ({percentage_complete}% Complete.) {optional}", end="\r")
+        print(f"  {task}  [{full_pixels}{empty_pixels}]   {current} of {total} ({percentage_complete}% Complete.) {optional}", end="\r")
         sys.stdout.write("\033[K")

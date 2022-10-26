@@ -32,8 +32,7 @@ class Battle(models.Model):
 
 
 class PokemonType(models.Model):
-    title = models.CharField(max_length=255)
-    sprite = models.ForeignKey(Art, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255)
 
 
 class BasePokemon(models.Model):
