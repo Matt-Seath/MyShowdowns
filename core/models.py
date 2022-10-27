@@ -42,13 +42,12 @@ class BasePokemon(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    dex_number = models.IntegerField()
     type_1 = models.ForeignKey(PokemonType, on_delete=models.PROTECT, related_name="type_1")
     type_2 = models.ForeignKey(PokemonType, null=True, on_delete=models.PROTECT, related_name="type_2")
     ability_1 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_1")
     ability_2 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_2")
     ability_3 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_3")
-    sprite = models.ForeignKey(Art, on_delete=models.PROTECT)
+    artwork = models.ForeignKey(Art, on_delete=models.CASCADE)
     base_hp = models.IntegerField()
     base_att = models.IntegerField()
     base_def = models.IntegerField()
