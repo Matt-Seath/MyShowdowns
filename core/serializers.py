@@ -13,12 +13,6 @@ class BattleSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "link", "match_format", "player_1", "player_2", "victor"]
 
 
-class PokemonTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PokemonType
-        fields = ["id", "title"]
-
-
 class BasePokemonSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasePokemon

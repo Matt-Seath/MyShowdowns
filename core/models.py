@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 class Art(models.Model):
+    id = models.IntegerField(primary_key=True)
     artwork = models.ImageField(null=True)
     front = models.ImageField(null=True)
     front_shiny = models.ImageField(null=True)
@@ -31,22 +32,24 @@ class Battle(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
 
-class PokemonType(models.Model):
-    name = models.CharField(max_length=255)
-
-
 class BasePokemon(models.Model):
     TIER_LIST = [
         ("UBER", "Uber"), ("OU", "Overused"), ("UUBL", "Underused Borderline"), ("UU", "Underused"), ("RUBL", "Rarelyused Borderline"),
         ("RU", "Rarelyused"), ("NUBL", "Neverused Borderline"), ("NU", "Neverused"), ("PU", "PU"), ("U", "Untiered"), ("NA", "n/a")
     ]
 
+    TYPE_LIST = [
+        ("normal", "normal"), ("fire", "fire"), ("water", "water"), ("grass", "grass"), ("flying", "flying"), ("fighting", "fighting"), 
+        ("poison", "poison"), ("electric", "electric"), ("ground", "ground"), ("rock", "rock"), ("psychic", "psychic"), ("ice", "ice"), 
+        ("bug", "bug"), ("ghost", "ghost"), ("steel", "steel"), ("dragon", "dragon"), ("dark", "dark"), ("fairy", "fairy")
+    ]
+
     name = models.CharField(max_length=255)
-    type_1 = models.ForeignKey(PokemonType, on_delete=models.PROTECT, related_name="type_1")
-    type_2 = models.ForeignKey(PokemonType, null=True, on_delete=models.PROTECT, related_name="type_2")
+    type_1 = models.CharField(max_length=255, choices=TYPE_LIST)
+    type_2 = models.CharField(max_length=255, null=True, choices=TYPE_LIST)
     ability_1 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_1")
-    ability_2 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_2")
-    ability_3 = models.ForeignKey(Ability, on_delete=models.PROTECT, related_name="ability_3")
+    ability_2 = models.ForeignKey(Ability, null=True, on_delete=models.PROTECT, related_name="ability_2")
+    ability_3 = models.ForeignKey(Ability, null=True, on_delete=models.PROTECT, related_name="ability_3")
     artwork = models.ForeignKey(Art, on_delete=models.CASCADE)
     base_hp = models.IntegerField()
     base_att = models.IntegerField()
@@ -54,7 +57,7 @@ class BasePokemon(models.Model):
     base_sp_att = models.IntegerField()
     base_sp_def = models.IntegerField()
     base_spd = models.IntegerField()
-    tier = models.CharField(max_length=255, choices=TIER_LIST, default="NA")
+    tier = models.CharField(max_length=255, choices=TIER_LIST, null=True)
 
 
 class CustomPokemon(models.Model):

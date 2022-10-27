@@ -6,5 +6,4 @@ from .models import *
 admin.site.register(Battle)
 admin.site.register(Art)
 admin.site.register(Username)
-admin.site.register(PokemonType)
 admin.site.register(BasePokemon)

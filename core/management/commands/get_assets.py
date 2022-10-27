@@ -35,11 +35,6 @@ class Command(BaseCommand):
                             file = open(image, "wb")
                             file.write(artwork_response.content)
                             file.close
-                            print(image + " has successfully downloaded.")
-                        elif artwork_response.status_code == 404:
-                            print(f"{image} does not exist.")                
-                        else:
-                            print("Error. Could not retrieve" + image)
                     
                     bar("Retrieving Official Artwork", i, total_count, print_info)
 
@@ -140,15 +135,18 @@ class Command(BaseCommand):
                     if "abilities" in pokemon:
                         ability_count = len(pokemon["abilities"])
                         if ability_count > 0:
-                            ability_1 = pokemon["abilities"][0]["ability"]["name"]
+                            # ability_1 = pokemon["abilities"][0]["ability"]["name"]
+                            ability_1 = int(pokemon["abilities"][0]["ability"]["url"].rsplit('/', )[-2])
                         else:
                             ability_1 = None
                         if ability_count > 1:
-                            ability_2 = pokemon["abilities"][1]["ability"]["name"]
+                            # ability_2 = pokemon["abilities"][1]["ability"]["name"]
+                            ability_2 = int(pokemon["abilities"][1]["ability"]["url"].rsplit('/', )[-2])
                         else:
                             ability_2 = None
                         if ability_count > 2:
-                            ability_3 = pokemon["abilities"][2]["ability"]["name"]
+                            # ability_3 = pokemon["abilities"][2]["ability"]["name"]
+                            ability_3 = int(pokemon["abilities"][2]["ability"]["url"].rsplit('/', )[-2])
                         else:
                             ability_3 = None
                     if "types" in pokemon:
@@ -169,19 +167,19 @@ class Command(BaseCommand):
 
                     info = f"{pokemon_id}: {name}"
 
-                    # with connection.cursor() as cursor:
-                    #     cursor.execute(
-                    #         """INSERT INTO core_basepokemon (
-                    #             name, type_1, type_2, ability_1, ability_2, ability_3, 
-                    #             artwork, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd)
-                    #             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
-                    #             (
-                    #                 name, type_1, type_2, ability_1, ability_2, ability_3, 
-                    #                 artwork, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd
-                    #             )
-                    #     )
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """INSERT INTO core_basepokemon (
+                                name, type_1, type_2, ability_1_id, ability_2_id, ability_3_id, 
+                                artwork_id, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
+                                (
+                                    name, type_1, type_2, ability_1, ability_2, ability_3, 
+                                    pokemon_id, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd
+                                )
+                        )
 
-                    bar("Populating Ability Table", i, total_count, info)
+                    bar("Populating Pokemon Table", i, total_count, info)
 
 
         def populate_pokemon_type_table():
@@ -203,6 +201,8 @@ class Command(BaseCommand):
 
         def populate_artwork_table(pokemon_list, artwork_path, sprite_path, sprite_shiny_path):
             total_count = pokemon_list["count"]
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM core_art")
 
             for i in range(total_count):
                 list_item = pokemon_list["results"][i]
@@ -210,26 +210,27 @@ class Command(BaseCommand):
                 if pokemon_response.status_code == 200:
                     pokemon = pokemon_response.json()
                     pokemon_id = str(pokemon["id"])
+                    name = pokemon["name"]
+                    info = f"{pokemon_id}: {name}"
+
                     
                     artwork = artwork_path + pokemon_id + ".png"
                     artwork_image_path = Path(artwork)
-                    if artwork_image_path.exists():        
-                        with connection.cursor() as cursor:
-                            cursor.execute("INSERT INTO core_art (artwork) VALUES (%s)", (artwork, ))
-
+                    if not artwork_image_path.exists():        
+                        artwork = None
                     sprite = sprite_path + pokemon_id + ".png"
                     sprite_image_path = Path(sprite)
-                    if sprite_image_path.exists():        
-                        with connection.cursor() as cursor:
-                            cursor.execute("INSERT INTO core_art (front) VALUES (%s)", (sprite, ))
-
+                    if not sprite_image_path.exists():        
+                        sprite = None
                     sprite_shiny = sprite_shiny_path + pokemon_id + ".png"
                     shiny_image_path = Path(sprite_shiny)
-                    if shiny_image_path.exists():        
-                        with connection.cursor() as cursor:
-                            cursor.execute("INSERT INTO core_art (front_shiny) VALUES (%s)", (sprite_shiny, ))
+                    if not shiny_image_path.exists():  
+                        sprite_shiny = None      
+                    with connection.cursor() as cursor:
+                        cursor.execute("INSERT INTO core_art (id, artwork, front, front_shiny) VALUES (%s, %s, %s, %s)", 
+                            (pokemon["id"], artwork, sprite, sprite_shiny))
 
-                    bar("Populating Ability Table", i, total_count)
+                    bar("Populating Artwork Table", i, total_count, info)
 
 
         def build_media_directories():
@@ -264,12 +265,12 @@ class Command(BaseCommand):
             pokemon_list = pokemon_response.json()
             ability_list = ability_response.json()
             artwork_path, sprite_path, sprite_shiny_path = build_media_directories()
-            # populate_pokemon_type_table()
-            # get_artwork(pokemon_list, artwork_path)
-            # get_sprites(pokemon_list, sprite_path, sprite_shiny_path)
+            populate_pokemon_type_table()
+            get_artwork(pokemon_list, artwork_path)
+            get_sprites(pokemon_list, sprite_path, sprite_shiny_path)
             populate_artwork_table(pokemon_list, artwork_path, sprite_path, sprite_shiny_path)
-            # populate_pokemon_table(pokemon_list)
-            # populate_ability_table(ability_list)
+            populate_ability_table(ability_list)
+            populate_pokemon_table(pokemon_list)
 
             print(" ")
             print("Done.")
