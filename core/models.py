@@ -9,16 +9,25 @@ class Art(models.Model):
     front = models.ImageField(null=True)
     front_shiny = models.ImageField(null=True)
 
+    def __str__(self) -> str:
+        return str(self.id)
+
 
 class Ability(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, null=True)
     effect = models.CharField(max_length=255, null=True)
 
+    def __str__(self) -> str:
+        return str(self.name)
+
 
 class Username(models.Model):
     name = models.CharField(max_length=255)
     sprite = models.ForeignKey(Art, null=True, blank=True, on_delete=models.PROTECT)
+
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 class Battle(models.Model):
@@ -30,6 +39,9 @@ class Battle(models.Model):
     victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
     description = models.CharField(max_length=255, null=True)
     date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return str(self.title)
 
 
 class BasePokemon(models.Model):
@@ -59,6 +71,12 @@ class BasePokemon(models.Model):
     base_spd = models.IntegerField()
     tier = models.CharField(max_length=255, choices=TIER_LIST, null=True)
 
+    def __str__(self) -> str:
+        return str(self.name)
+
+    class Meta:
+        ordering = ["name"]
+
 
 class CustomPokemon(models.Model):
     NATURE_LIST = [
@@ -81,5 +99,7 @@ class CustomPokemon(models.Model):
     evs_sp_def = models.IntegerField(default=0)
     evs_spd = models.IntegerField(default=0)
 
+    def __str__(self) -> str:
+        return str(self.pokemon)
 
 
