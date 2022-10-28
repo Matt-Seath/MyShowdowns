@@ -79,7 +79,6 @@ class Command(BaseCommand):
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM core_ability")
 
-
             for i in range(total_count):
                 list_item = ability_list["results"][i]
                 ability = list_item["name"]
@@ -92,33 +91,32 @@ class Command(BaseCommand):
                         ability_id = ability["id"]
                     if "name" in ability:
                         ability_name = ability["name"]
-                    if "effect_entries" in ability:
-                        if len(ability["flavor_text_entries"]) > 7:
-                            ability_effect = ability["flavor_text_entries"][7]["flavor_text"]             
-                        elif len(ability["effect_entries"]) == 2:
-                            ability_effect = ability["effect_entries"][1]["effect"]
-                        elif len(ability["effect_entries"]) == 1:
-                            ability_effect = ability["effect_entries"][0]["effect"]
-                        elif len(ability["effect_entries"]) == 0:
-                                ability_effect = "Data not found."
+                    if "flavor_text_entries" in ability:
+                        entry_count = len(ability["flavor_text_entries"])
+                        for entry in range(entry_count):
+                            valid_entry = ability["flavor_text_entries"][entry]["flavor_text"]  
+                            entry_lang = ability["flavor_text_entries"][entry]["language"]["name"]
+                            if valid_entry and entry_lang == "en":
+                                ability_effect = valid_entry
+                                break
+
                     info = f"{ability_id}: {ability_name}"
 
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """INSERT INTO core_ability (id, name, effect)
-                            VALUES (%s, %s, %s)""", (ability_id, ability_name, ability_effect)
-                        )
-                    # print("Successfully added " + ability_name + " to the database.")
+                    if ability_id < 1000:
+                        with connection.cursor() as cursor:
+                            cursor.execute(
+                                """INSERT INTO core_ability (id, name, effect)
+                                VALUES (%s, %s, %s)""", (ability_id, ability_name, ability_effect)
+                            )
+                         # print("Successfully added " + ability_name + " to the database.")
 
                     bar("Populating Ability Table", i, total_count, info)
 
 
         def populate_pokemon_table(pokemon_list):
             total_count = pokemon_list["count"]
-
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM core_basepokemon")
-
 
             for i in range(total_count):
                 list_item = pokemon_list["results"][i]
@@ -164,17 +162,16 @@ class Command(BaseCommand):
                         base_sp_def = (pokemon["stats"][4]["base_stat"])
                         base_spd = (pokemon["stats"][5]["base_stat"])
 
-
                     info = f"{pokemon_id}: {name}"
 
                     with connection.cursor() as cursor:
                         cursor.execute(
                             """INSERT INTO core_basepokemon (
-                                name, type_1, type_2, ability_1_id, ability_2_id, ability_3_id, 
+                                id, name, type_1, type_2, ability_1_id, ability_2_id, ability_3_id, 
                                 artwork_id, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
                                 (
-                                    name, type_1, type_2, ability_1, ability_2, ability_3, 
+                                    pokemon_id, name, type_1, type_2, ability_1, ability_2, ability_3, 
                                     pokemon_id, base_hp, base_att, base_def, base_sp_att, base_sp_def, base_spd
                                 )
                         )

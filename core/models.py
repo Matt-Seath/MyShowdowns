@@ -56,6 +56,7 @@ class BasePokemon(models.Model):
         ("bug", "bug"), ("ghost", "ghost"), ("steel", "steel"), ("dragon", "dragon"), ("dark", "dark"), ("fairy", "fairy")
     ]
 
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
     type_1 = models.CharField(max_length=255, choices=TYPE_LIST)
     type_2 = models.CharField(max_length=255, blank=True, null=True, choices=TYPE_LIST)
@@ -69,7 +70,7 @@ class BasePokemon(models.Model):
     base_sp_att = models.IntegerField()
     base_sp_def = models.IntegerField()
     base_spd = models.IntegerField()
-    tier = models.CharField(max_length=255, choices=TIER_LIST, default="U")
+    tier = models.CharField(max_length=255, choices=TIER_LIST, null=True, default="U")
 
     def __str__(self) -> str:
         return str(self.name)
