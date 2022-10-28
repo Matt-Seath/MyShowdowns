@@ -69,7 +69,7 @@ class BasePokemon(models.Model):
     base_sp_att = models.IntegerField()
     base_sp_def = models.IntegerField()
     base_spd = models.IntegerField()
-    tier = models.CharField(max_length=255, choices=TIER_LIST, null=True)
+    tier = models.CharField(max_length=255, choices=TIER_LIST, default="U")
 
     def __str__(self) -> str:
         return str(self.name)
@@ -84,6 +84,7 @@ class CustomPokemon(models.Model):
     ]
 
     pokemon = models.ForeignKey(BasePokemon, on_delete=models.CASCADE)
+    nickname = models.CharField(max_length=55, null=True)
     nature = models.CharField(choices=NATURE_LIST, max_length=255, null=True)
     ability = models.ForeignKey(Ability, on_delete=models.PROTECT)
     ivs_hp = models.IntegerField(default=31)
