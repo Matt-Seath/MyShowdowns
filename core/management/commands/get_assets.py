@@ -262,7 +262,7 @@ class Command(BaseCommand):
             pokemon_list = pokemon_response.json()
             ability_list = ability_response.json()
             artwork_path, sprite_path, sprite_shiny_path = build_media_directories()
-            populate_pokemon_type_table()
+            # populate_pokemon_type_table()
             get_artwork(pokemon_list, artwork_path)
             get_sprites(pokemon_list, sprite_path, sprite_shiny_path)
             populate_artwork_table(pokemon_list, artwork_path, sprite_path, sprite_shiny_path)
