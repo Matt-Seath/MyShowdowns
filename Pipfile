@@ -15,6 +15,7 @@ requests = "*"
 pillow = "*"
 markdown = "*"
 django-filter = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 

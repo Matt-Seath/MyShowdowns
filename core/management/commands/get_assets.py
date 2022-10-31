@@ -179,23 +179,6 @@ class Command(BaseCommand):
                     bar("Populating Pokemon Table", i, total_count, info)
 
 
-        def populate_pokemon_type_table():
-            type_list = [
-                "normal", "fire", "Water", "Grass", "Flying", "Fighting", 
-                "Poison", "Electric", "Ground", "Rock", "Psychic", "Ice", 
-                "Bug", "Ghost", "Steel", "Dragon", "Dark", "Fairy"
-            ]
-    
-            for i in range(len(type_list)):
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """INSERT INTO core_pokemontype (name)
-                            VALUES (%s)""", (type_list[i],)
-                        )
-
-                    bar("Populating PokemonType Table", i, len(type_list))
-
-
         def populate_artwork_table(pokemon_list, artwork_path, sprite_path, sprite_shiny_path):
             total_count = pokemon_list["count"]
             with connection.cursor() as cursor:
@@ -262,7 +245,6 @@ class Command(BaseCommand):
             pokemon_list = pokemon_response.json()
             ability_list = ability_response.json()
             artwork_path, sprite_path, sprite_shiny_path = build_media_directories()
-            populate_pokemon_type_table()
             get_artwork(pokemon_list, artwork_path)
             get_sprites(pokemon_list, sprite_path, sprite_shiny_path)
             populate_artwork_table(pokemon_list, artwork_path, sprite_path, sprite_shiny_path)
