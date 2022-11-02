@@ -59,7 +59,7 @@ def main(url, description=None):
             if end_index > end_comma and end_comma != -1:
                 end_index = end_comma
             yield text[string_end:end_index].lower()
-            start += len(sub) # use start += 1 to find overlapping matches
+            start += len(sub)
  
 
     result = requests.get(url)
