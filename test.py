@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def main():
+def main(url, description=None):
     TEXT_STRINGS = [
         "|player|p1|", "|player|p2|",
         "|tier|", "|gametype|",
@@ -60,19 +60,21 @@ def main():
                 end_index = end_comma
             yield text[string_end:end_index].lower()
             start += len(sub) # use start += 1 to find overlapping matches
-
-
-    url = "https://replay.pokemonshowdown.com/gen8ou-1682017822-nz8a2vmvbbyi2gcmrfbp9u41u4tgjg3pw"
+ 
 
     result = requests.get(url)
     doc = BeautifulSoup(result.text, "html.parser")
     script = doc.find_all("script")
     if script:
-        description = doc.find_all("meta")
+        default_description = doc.find_all("meta")[1].get("content")
         text = script[1].get_text()
         battle_dict["title"] = doc.title.string
-        battle_dict["description"] = description[1]["content"]
-        
+        if description:
+            battle_dict["description"] = description
+        else:
+            battle_dict["description"] = default_description
+        battle_dict["link"] = url
+
         for i in range(len(TEXT_STRINGS)):
             value = find_value(TEXT_STRINGS[i], text)
             if value:
@@ -91,4 +93,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main("https://replay.pokemonshowdown.com/gen8ou-1668639742")
