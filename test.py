@@ -1,11 +1,6 @@
-from django.core.management.base import BaseCommand
 from django.db import connection
-from myshowdowns import settings
-from core.management.commands.progress_bar import bar
 from bs4 import BeautifulSoup
-from pathlib import Path
 import requests
-import os
 
 
 def main():
@@ -21,19 +16,19 @@ def main():
 
     BATTLE_VARS = [
         "player_1", "player_2",
-        "tier", "gametype",
+        "match_format", "gametype",
         "victor",
     ]
 
-    BATTLE_PKM = [
+    BATTLE_PKM = [[
         "p1_pk_1", "p1_pk_2",
         "p1_pk_3", "p1_pk_4",
         "p1_pk_5", "p1_pk_6",
-        
+        ], [
         "p2_pk_1", "p2_pk_2",
         "p2_pk_3", "p2_pk_4",
         "p2_pk_5", "p2_pk_6",
-    ]
+    ]]
 
     battle_dict = {}
 
@@ -58,7 +53,12 @@ def main():
         while True:
             start = a_str.find(sub, start)
             if start == -1: return
-            yield start
+            string_end = start + len(sub)
+            end_index = a_str.find("|", string_end)
+            end_comma = a_str.find(",", string_end)
+            if end_index > end_comma and end_comma != -1:
+                end_index = end_comma
+            yield text[string_end:end_index].lower()
             start += len(sub) # use start += 1 to find overlapping matches
 
 
@@ -68,7 +68,11 @@ def main():
     doc = BeautifulSoup(result.text, "html.parser")
     script = doc.find_all("script")
     if script:
+        description = doc.find_all("meta")
         text = script[1].get_text()
+        battle_dict["title"] = doc.title.string
+        battle_dict["description"] = description[1]["content"]
+        
         for i in range(len(TEXT_STRINGS)):
             value = find_value(TEXT_STRINGS[i], text)
             if value:
@@ -77,15 +81,14 @@ def main():
                 print(f"Error! Could not find {TEXT_STRINGS[i]}")
                 return 1
         for i in range(2):
-            list(find_all(TEXT_PKM[i], text))
-        print(battle_dict)
+            for j, value in enumerate(find_all(TEXT_PKM[i], text)):
+                battle_dict[BATTLE_PKM[i][j]] = value
 
+        print(battle_dict)
     else:
         print("not found")
 
-    # gen = doc.find_all(text="")
 
-    # print(gen)
 
 if __name__ == "__main__":
     main()
