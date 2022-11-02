@@ -30,20 +30,6 @@ class Username(models.Model):
         return str(self.name)
 
 
-class Battle(models.Model):
-    title = models.CharField(max_length=255)
-    link = models.CharField(max_length=255)
-    match_format = models.CharField(max_length=255)
-    player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
-    player_2 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_2")
-    victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
-    description = models.CharField(max_length=255, blank=True, null=True)
-    date_created = models.DateTimeField(auto_now=True)
-
-    def __str__(self) -> str:
-        return str(self.title)
-
-
 class BasePokemon(models.Model):
     TIER_LIST = [
         ("UBER", "Uber"), ("OU", "Overused"), ("UUBL", "Underused Borderline"), ("UU", "Underused"), ("RUBL", "Rarelyused Borderline"),
@@ -77,6 +63,32 @@ class BasePokemon(models.Model):
 
     class Meta:
         ordering = ["name"]
+
+
+class Battle(models.Model):
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    match_format = models.CharField(max_length=255)
+    player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
+    player_2 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_2")
+    victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
+    description = models.CharField(max_length=255, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now=True)
+    p1_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p1_pk_1")
+    p1_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_2")
+    p1_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_3")
+    p1_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_4")
+    p1_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_5")
+    p1_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_6")
+    p2_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p2_pk_1")
+    p2_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_2")
+    p2_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_3")
+    p2_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_4")
+    p2_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_5")
+    p2_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_6")
+
+    def __str__(self) -> str:
+        return str(self.title)
 
 
 class CustomPokemon(models.Model):
