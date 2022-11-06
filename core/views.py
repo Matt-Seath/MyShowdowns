@@ -16,3 +16,7 @@ class PokemonViewSet(ModelViewSet):
     serializer_class = BasePokemonSerializer
 
 
+class AbilityViewSet(ModelViewSet):
+    queryset = Ability.objects.all()
+    serializer_class = AbilitySerializer
+
