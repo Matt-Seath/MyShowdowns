@@ -65,33 +65,6 @@ class BasePokemon(models.Model):
         ordering = ["name"]
 
 
-class Battle(models.Model):
-    title = models.CharField(max_length=255)
-    link = models.CharField(max_length=255)
-    match_format = models.CharField(max_length=255)
-    gametype = models.CharField(max_length=255)
-    player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
-    player_2 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_2")
-    victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
-    description = models.CharField(max_length=255, blank=True, null=True)
-    date_created = models.DateTimeField(auto_now=True)
-    p1_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p1_pk_1")
-    p1_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_2")
-    p1_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_3")
-    p1_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_4")
-    p1_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_5")
-    p1_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_6")
-    p2_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p2_pk_1")
-    p2_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_2")
-    p2_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_3")
-    p2_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_4")
-    p2_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_5")
-    p2_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_6")
-
-    def __str__(self) -> str:
-        return str(self.title)
-
-
 class CustomPokemon(models.Model):
     NATURE_LIST = [
         ("ADAMANT","Adamant"), ("MODEST", "Modest")
@@ -101,6 +74,7 @@ class CustomPokemon(models.Model):
     nickname = models.CharField(max_length=55, blank=True, null=True)
     nature = models.CharField(choices=NATURE_LIST, max_length=255, null=True)
     ability = models.ForeignKey(Ability, on_delete=models.PROTECT)
+    held_item = models.CharField(max_length=255, null=True, blank=True)
     ivs_hp = models.IntegerField(default=31)
     ivs_att = models.IntegerField(default=31)
     ivs_def = models.IntegerField(default=31)
@@ -117,4 +91,46 @@ class CustomPokemon(models.Model):
     def __str__(self) -> str:
         return str(self.pokemon)
 
+
+class CustomTeam(models.Model):
+    creator = models.ForeignKey(Username, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now=True)
+    match_format = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True, blank=True)
+    pk_1 = models.ForeignKey(CustomPokemon, on_delete=models.PROTECT, related_name="pk_1")
+    pk_2 = models.ForeignKey(CustomPokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="pk_2")
+    pk_3 = models.ForeignKey(CustomPokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="pk_3")
+    pk_4 = models.ForeignKey(CustomPokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="pk_4")
+    pk_5 = models.ForeignKey(CustomPokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="pk_5")
+    pk_6 = models.ForeignKey(CustomPokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="pk_6")
+
+
+class Battle(models.Model):
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    team = models.ForeignKey(CustomTeam, null=True, blank=True, on_delete=models.PROTECT)
+    match_format = models.CharField(max_length=255)
+    gametype = models.CharField(max_length=255)
+    player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
+    player_2 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_2")
+    victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
+    description = models.CharField(max_length=255, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now=True)
+    matches = models.ManyToManyField(CustomTeam, blank=True, related_name="matches")
+    p1_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p1_pk_1")
+    p1_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_2")
+    p1_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_3")
+    p1_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_4")
+    p1_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_5")
+    p1_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_6")
+    p2_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p2_pk_1")
+    p2_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_2")
+    p2_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_3")
+    p2_pk_4 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_4")
+    p2_pk_5 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_5")
+    p2_pk_6 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p2_pk_6")
+
+    def __str__(self) -> str:
+        return str(self.title)
 

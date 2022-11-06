@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'corsheaders',
     'core.apps.CoreConfig',
-    'api.apps.ApiConfig',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
