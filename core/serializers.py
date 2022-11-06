@@ -38,3 +38,15 @@ class CustomPokemonSerializer(serializers.ModelSerializer):
             "ivs_spd", "evs_hp", "evs_att", "evs_def", "evs_sp_att", 
             "evs_sp_def", "evs_spd"
         ]
+
+
+class ArtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Art
+        fields = ["id", "artwork", "front", "front_shiny"]
+
+
+class AbilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ability
+        fields = ["id", "name", "effect"]
