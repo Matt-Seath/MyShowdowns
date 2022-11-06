@@ -19,7 +19,24 @@ class BattleSerializer(serializers.ModelSerializer):
         ]
 
 
+class AbilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ability
+        fields = ["id", "name", "effect"]
+
+
+class SimpleAbilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ability
+        fields = ["name"]
+
+
 class BasePokemonSerializer(serializers.ModelSerializer):
+    ability_1= AbilitySerializer()
+    ability_2= AbilitySerializer()
+    ability_3= AbilitySerializer()
+    
+
     class Meta:
         model = BasePokemon
         fields = [
@@ -45,8 +62,3 @@ class ArtSerializer(serializers.ModelSerializer):
         model = Art
         fields = ["id", "artwork", "front", "front_shiny"]
 
-
-class AbilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ability
-        fields = ["id", "name", "effect"]

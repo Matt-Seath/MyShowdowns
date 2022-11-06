@@ -5,6 +5,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register("battles", BattleViewSet)
+router.register("pokemon", PokemonViewSet)
 
 urlpatterns = router.urls
 

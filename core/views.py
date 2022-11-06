@@ -12,7 +12,7 @@ class BattleViewSet(ModelViewSet):
 
 
 class PokemonViewSet(ModelViewSet):
-    queryset = BasePokemon.objects.all()
+    queryset = BasePokemon.objects.select_related("ability_1", "ability_2", "ability_3").all()
     serializer_class = BasePokemonSerializer
 
 

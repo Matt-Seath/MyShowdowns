@@ -109,7 +109,6 @@ class CustomTeam(models.Model):
 class Battle(models.Model):
     title = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
-    team = models.ForeignKey(CustomTeam, null=True, blank=True, on_delete=models.PROTECT)
     match_format = models.CharField(max_length=255)
     gametype = models.CharField(max_length=255)
     player_1 = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="player_1")
@@ -117,7 +116,7 @@ class Battle(models.Model):
     victor = models.ForeignKey(Username, on_delete=models.PROTECT, related_name="victor")
     description = models.CharField(max_length=255, blank=True, null=True)
     date_created = models.DateTimeField(auto_now=True)
-    matches = models.ManyToManyField(CustomTeam, blank=True, related_name="matches")
+    teams = models.ManyToManyField(CustomTeam, blank=True, related_name="matches")
     p1_pk_1 = models.ForeignKey(BasePokemon, on_delete=models.PROTECT, related_name="p1_pk_1")
     p1_pk_2 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_2")
     p1_pk_3 = models.ForeignKey(BasePokemon, null=True, blank=True, on_delete=models.PROTECT, related_name="p1_pk_3")
